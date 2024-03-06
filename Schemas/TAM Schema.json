@@ -121,7 +121,7 @@
                     "description": "Registry of reports uploaded to this CoreTIDE instance",
                     "type": "array",
                     "items": {
-                        "enum": [],
+                        "enum": [""],
                         "markdownEnumDescriptions": []
                     },
                     "uniqueItems": true

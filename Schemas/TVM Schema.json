@@ -123,7 +123,7 @@
                     "description": "Registry of reports uploaded to this CoreTIDE instance",
                     "type": "array",
                     "items": {
-                        "enum": [],
+                        "enum": [""],
                         "markdownEnumDescriptions": []
                     },
                     "uniqueItems": true
@@ -258,7 +258,7 @@
                     "description": "Threat Actors",
                     "example": "NOBELIUM",
                     "items": {
-                        "enum": [],
+                        "enum": [""],
                         "markdownEnumDescriptions": []
                     },
                     "uniqueItems": true
@@ -3650,7 +3650,7 @@
                                 "icon": "\u2623\ufe0f",
                                 "description": "Threat Vectors",
                                 "type": "string",
-                                "enum": [],
+                                "enum": [""],
                                 "markdownEnumDescriptions": []
                             },
                             "description": {
