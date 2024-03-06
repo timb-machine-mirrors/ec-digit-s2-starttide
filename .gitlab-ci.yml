@@ -92,13 +92,21 @@ default:
     - cd ../ #Back in Tide Repo
     
 
+# ========================FETCH STRATEGY======================
+# By default this workflow is setup to pull the latest version
+# of CoreTIDE from the public repo, but you may comment it out 
+# and prefer a local setup, if so configure the include statement
+
 # Public CoreTIDE Setup
 # Fetches the pipelines from the latest version of the repository 
 include:
   - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/tide.yml'
+
+
 # Local CoreTIDE Setup
 # Replace the group/project path, it can't be set from pipeline/CI variables
+#
 #include:
-#  - project: 'group/coretide' 
-#    ref: master
-#    file: '/Pipelines/Gitlab/tide.yml'
+#  - project: 'group/coretide' #Add the group or path where coretide is located
+#    ref: core # Or another branch if you have set it up
+#    file: '/Pipelines/Gitlab/tide.yml' #Do not modify
