@@ -31,21 +31,31 @@ workflow:
 # into your custom branch without introducing breaks.
 #
 # Review the settings in this page to edit CoreTIDE settings relevant to local repos.
+  
 
 variables:
   TIDE_REPO_ACCESS: git@$CI_SERVER_HOST:$CI_PROJECT_PATH.git
   TIDE_WIKI_ACCESS: git@$CI_SERVER_HOST:$CI_PROJECT_PATH.wiki.git
   # Edit this variable to change where CoreTIDE can be found
   TIDE_CORE_REPO: coretide
-  # Local CoreTIDE Setup, default fetches from same group, can be further customized
-  #TIDE_CORE_ACCESS: git@$CI_SERVER_HOST:$CI_PROJECT_NAMESPACE/$TIDE_CORE_REPO.git
-  # Remote CoreTIDE Setup
-  TIDE_CORE_ACCESS: git@code.europa.eu:ec-digit-s2/opentide/coretide.git
+  TIDE_CORE_SETUP: REMOTE # Set to LOCAL if you wish to clone CoreTIDE in your local gitlab instance
+                          # When set to remote, will fetch pipelines from the code.europa.eu location,
+                          # and inject this repository during pipelines. REMOTE is the default strategy
+                          # if you can allow network from your instance to code.europa.eu, and don't
+                          # need to develop custom features over CoreTIDE. 
   TIDE_WIKI: $CI_PROJECT_NAME.wiki
   TIDE_WIKI_GENERATION: "GITLAB_WIKI" # Only supported option, set to DISABLED to prevent
   TIDE_DEPLOYMENT: "ENABLED" # Set to DISABLED to prevent any deployment
   DOCUMENTATION_TYPE: GLFM
   GIT_DEPTH: 150
+
+rules:
+  - if: $TIDE_CORE_SETUP == "REMOTE"
+    variables:
+      TIDE_CORE_ACCESS: git@code.europa.eu:ec-digit-s2/opentide/coretide.git
+  - if: $TIDE_CORE_SETUP == "LOCAL"
+    variables:
+      TIDE_CORE_ACCESS: git@$CI_SERVER_HOST:$CI_PROJECT_NAMESPACE/$TIDE_CORE_REPO.git
 
 # For the maximum compatibility in build environments, we privilege SSH
 # over HTTPS in most cases. The SSH key will also be used to prove
@@ -100,9 +110,14 @@ default:
 # Public CoreTIDE Setup
 # Fetches the pipelines from the latest version of the repository 
 include:
-  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/tide.yml'
-
-
+  - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/tide_remote.yml'
+    rules:
+      - if: $TIDE_CORE_SETUP == "REMOTE"
+  - project: 'group/coretide' #Add the group or path where coretide is located
+    ref: core # Or another branch if you have set it up
+    file: '/Pipelines/Gitlab/tide.yml' #Do not modify
+    rules:
+      - if: $TIDE_CORE_SETUP == "LOCAL"
 # Local CoreTIDE Setup
 # Replace the group/project path, it can't be set from pipeline/CI variables
 #
