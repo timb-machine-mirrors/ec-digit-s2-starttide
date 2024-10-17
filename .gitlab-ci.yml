@@ -103,12 +103,14 @@ default:
     
 
 # ========================FETCH STRATEGY======================
-# By default this workflow is setup to pull the latest version
-# of CoreTIDE from the public repo, but you may comment it out 
-# and prefer a local setup, if so configure the include statement
-
-# Public CoreTIDE Setup
+# The nesting behaviour is controlled by $TIDE_CORE_SETUP, 
+# which must be set under the `variables` section 
+# == Public CoreTIDE Setup
 # Fetches the pipelines from the latest version of the repository 
+#
+# == Local CoreTIDE Setup
+# Imports pipeline remotely from CoreTIDE at core.europa.eu, using a sequence
+# of raw nested imports
 include:
   - remote: 'https://code.europa.eu/ec-digit-s2/opentide/coretide/-/raw/core/Pipelines/Gitlab/tide_remote.yml'
     rules:
@@ -118,10 +120,3 @@ include:
     file: '/Pipelines/Gitlab/tide.yml' #Do not modify
     rules:
       - if: $TIDE_CORE_SETUP == "LOCAL"
-# Local CoreTIDE Setup
-# Replace the group/project path, it can't be set from pipeline/CI variables
-#
-#include:
-#  - project: 'group/coretide' #Add the group or path where coretide is located
-#    ref: core # Or another branch if you have set it up
-#    file: '/Pipelines/Gitlab/tide.yml' #Do not modify
